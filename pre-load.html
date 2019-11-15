@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    .marsk {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(0, 0, 0, .5);
+    }
+    .num {
+      color: #fff;
+      font-size: 20px;
+      text-align: center;
+    }
+    .bar-cont {
+      width: 200px;
+      height: 10px;
+      margin: 0 auto;
+      background-color: #999;
+    }
+    .bar {
+      width: 0;
+      height: 10px;
+      background-color: aqua;
+    }
+  </style>
+</head>
+<body>
+  <div class="marsk">
+    <div class="num">0%</div>
+    <div class="bar-cont">
+      <div class="bar"></div>
+    </div>
+  </div>
+  <script>
+    var imgs = [
+      'http://photocdn.sohu.com/20120807/Img350058109.jpg',
+      'http://photocdn.sohu.com/20120807/Img350058127.jpg',
+      'http://photocdn.sohu.com/20120807/Img350058132.jpg'
+    ]
+    var marsk = document.querySelector('.marsk')
+
+    preadd(marsk, imgs)
+
+    function preadd (marsk, source) {
+      var len = source.length
+      var idx = 0
+      source.forEach(item => {
+        var img = new Image()
+        img.src = item
+        img.onload = function () {
+          idx++
+          document.body.appendChild(img)
+          document.querySelector('.num').innerHTML = (idx / len) * 100 + '%'
+          document.querySelector('.bar').style.width = (idx / len) * 100 + '%'
+          if (idx === len) {
+            setTimeout(_ => {
+              marsk.style.display = 'none'
+            }, 1500)
+          }
+        }
+      })
+    }
+  </script>
+</body>
+</html>

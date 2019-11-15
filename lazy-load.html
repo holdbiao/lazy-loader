@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <button id="btn">加载</button>
+  <script>
+    var imgs = [
+      'http://photocdn.sohu.com/20120807/Img350058109.jpg',
+      'http://photocdn.sohu.com/20120807/Img350058127.jpg',
+      'http://photocdn.sohu.com/20120807/Img350058132.jpg'
+    ]
+
+    document.querySelector('#btn').onclick = function () {
+      // 按需加载资源
+      // imgs.map((item, index) => {
+      //   setTimeout(_ => {
+      //     lazyLoader(imgs[index])
+      //   }, 500 * (index + 1))
+      // })
+
+      // 异步跟闭包, 循环内部加个自执行的行数调用，闭包问题
+      for (var i=0; i<imgs.length; i++) {
+        (function (i) {
+          setTimeout(_ => {
+            lazyLoader(imgs[i])
+            // console.log(i)
+          }, 500 * (i + 1))
+        })(i)
+      }
+
+    }
+    // 懒加载资源函数
+    function lazyLoader (url, type = 'img', target) {
+      if (!url) throw new Error('the first arguments is not give')
+      if (!type) throw new Error('the seconde arguments is not give')
+
+      var target = target || document
+
+      var cator = { // 兼容类型，多态
+        img: function () {
+          return new Image()
+        },
+        js: function () {
+          return document.createElement('script')
+        }
+      }
+      if (typeof url === 'string') { // 单个地址
+        var dom = cator[type]()
+        dom.src = url
+        target.body.appendChild(dom)
+      } else { // 多个地址
+        url.forEach(item => {
+          var dom = cator[type]()
+          console.log(target)
+          dom.src = item
+          target.body.appendChild(dom)
+        })
+      }
+    }
+  </script>
+</body>
+</html>
